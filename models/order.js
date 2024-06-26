@@ -8,10 +8,13 @@ const OrderSchema=new mongoose.Schema({
         quantity:{
             type:Number
         },
-        orderedBy:[]
+        price:{
+            type:Number
+        }
+       
         
     })
 
-const User=mongoose.model("user_info",UserSchema);
+const Order=mongoose.model("order_info",OrderSchema);
 
-module.exports=User;
+module.exports=Order;

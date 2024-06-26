@@ -1,10 +1,14 @@
 const express=require('express');
 const router=express.Router();
-const {addProduct}=require('../controllers/products')
+const {addProduct,
+    removeProduct
+}=require('../controllers/products');
+const {displayProduct,
+    placeOrder
+}=require('../controllers/user');
 
-// router.get('/',displayProduct);
-// router.patch('/',placeOrder);
-router.post('/',addProduct);
-// router.delete('/',removeProduct);
-
+router.get('/',displayProduct);
+router.patch('/order/:id/:quantity',placeOrder);
+router.post('/admin',addProduct);
+router.delete('/admin/delete/:id',removeProduct);
 module.exports=router;
