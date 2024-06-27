@@ -4,11 +4,21 @@ const Product=require('../models/products');
 
 async function addProduct(req,res){
     // const body=req.body
-    const {name, age, price} = req.body;
+    // middleware
+    // jwt - cookies
+    //  res.cookies("acces", token)
+
+    // using middlware  verfyjwt() -> admin
+
+
+
+    const {Name,Price,Stock} = req.body;
     await Product.create({
-        Name:body.Name,
-        Price:body.Price,
-        Stock:body.Stock
+        Name:Name,
+        Price:Price,
+        Stock:Stock
+        // owner: admin._id
+       
     })
     return res.status(200).json({"Message":"Successfull"})
 }
@@ -16,6 +26,8 @@ async function removeProduct(req,res){
     const {id}=req.params;
 
     const deletedproduct = await Product.findByIdAndDelete(id)
+
+    // deletedproduct.owner == req.user._id
 
     if(!deletedproduct){
         return res.status(200).json({"Message":"Product now found "});

@@ -1,17 +1,18 @@
-const mongoose=require('mongoose');
+const mongoose = require('mongoose');
 
-async function connectDb(url){
-
-     try{
-        await mongoose.connect(url);
+async function connectDb(url) {
+    try {
+        await mongoose.connect(url, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+            serverSelectionTimeoutMS: 5000, // Increase timeout to 5 seconds
+        });
         console.log("Mongo connected successfully");
+    } catch (err) {
+        console.log("Error occurred", err);
     }
-    catch(err){
-        console.log("Error occured",err);
-    }
-    
 }
-module.exports={
+
+module.exports = {
     connectDb,
 }
-

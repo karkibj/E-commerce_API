@@ -10,6 +10,10 @@ const OrderSchema=new mongoose.Schema({
         },
         price:{
             type:Number
+        },
+        OrderedDate:{
+            type:Date
+            
         }
        
         

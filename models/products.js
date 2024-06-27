@@ -15,6 +15,10 @@ const productSchema=new mongoose.Schema({
         require:true,
         
     }
+    // owner: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "admin"
+    // }
 })
 
 const Product=mongoose.model("product_info",productSchema);
