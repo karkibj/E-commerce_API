@@ -11,8 +11,19 @@ async function addProduct(req,res){
     // using middlware  verfyjwt() -> admin
 
 
+    
+
 
     const {Name,Price,Stock} = req.body;
+
+    // if(!Name && !Price){
+    //     throw new Error(400, "msg")
+    // }
+
+    [].some((item) => item ==="" || item?.trim()==undefined 
+    )
+    
+
     await Product.create({
         Name:Name,
         Price:Price,

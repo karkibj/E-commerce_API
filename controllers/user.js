@@ -18,9 +18,9 @@ async function placeOrder(req, res) {
     const stock = prodcut.Stock;
 
     if (stock < Number(quantity)) {
-        return res.send("Out of stock,Stock available: " + stock)
+        return res.json({"check":"Out of stock"});
     }
-    const total_price = Number(quantity) * price
+    const total_price = Number(quantity) * price;
     const placeOrder = await Order.create({
         product_id: id,
         quantity: Number(quantity),
