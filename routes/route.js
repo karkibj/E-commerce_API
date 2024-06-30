@@ -7,6 +7,24 @@ const {displayProduct,
     placeOrder
 }=require('../controllers/user');
 
+
+/**
+ * @swagger
+ * /home:
+ *   get:
+ *     summary: Retrieve the home page with product data
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved the home page with product data
+ *         content:
+ *           text/html:
+ *             schema:
+ *               type: string
+ *       500:
+ *         description: Internal Server Error
+ */
+router.get('/', displayProduct);
+
 /**
  * @swagger
  * /home/order/{id}/{quantity}:

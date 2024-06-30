@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Product = require('../models/products');
 const Order = require('../models/order');
+const User=require('../models/user');
 
 async function displayProduct(req, res) {
     productData = await Product.find({});
@@ -34,7 +35,21 @@ async function placeOrder(req, res) {
         return res.status(201).json({ "Status": "Order successfull", "Total price": total_price });
     }
 }
+
+
+const createUser=async (req,res)=>{
+
+    const {name,email,password,phone}=req.body;
+    await User.create({
+        Name:name,
+        email:email,
+        password:password,
+        Phone:phone
+    })
+    return res.status(201).json({"message":"Your account has been created!"});
+}
 module.exports = {
     displayProduct,
     placeOrder,
+    createUser,
 }

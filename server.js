@@ -11,13 +11,15 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
-
+const url = 'mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net//Ecommerce?retryWrites=true&w=majority';
 const port = 8080;
-connectDb("mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net/Ecommerce");
+// connectDb("mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net/Ecommerce");
+connectDb(url);
+
+
 
 const options = {
     definition: {
-        openapi: '3.0.0',
         info: {
             title: 'E-commerce Application',
             version: '1.0.0'

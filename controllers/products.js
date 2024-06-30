@@ -3,7 +3,7 @@ const Product=require('../models/products');
 
 
 async function addProduct(req,res){
-    // const body=req.body
+    const body=req.body
     // middleware
     // jwt - cookies
     //  res.cookies("acces", token)
@@ -20,8 +20,8 @@ async function addProduct(req,res){
     //     throw new Error(400, "msg")
     // }
 
-    [].some((item) => item ==="" || item?.trim()==undefined 
-    )
+    // items.some(item => item === "" || item?.trim() === undefined);
+    
     
 
     await Product.create({
