@@ -4,7 +4,8 @@ const {addProduct,
     removeProduct
 }=require('../controllers/products');
 const {displayProduct,
-    placeOrder
+    placeOrder,
+    createUser
 }=require('../controllers/user');
 
 
@@ -87,7 +88,16 @@ router.get('/', displayProduct);
  */
 router.patch('/home/order/:id/:quantity', placeOrder);
 
-
+/**
+ * @swagger
+ * /admin
+ *     post:
+ *        summary:add the product 
+ *        parameters:
+ *              -in 
+ */
 router.post('/admin',addProduct);
 router.delete('/admin/delete/:id',removeProduct);
+
+router.post('/register',createUser);
 module.exports=router;

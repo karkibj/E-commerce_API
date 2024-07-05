@@ -14,9 +14,7 @@ const OrderSchema=new mongoose.Schema({
         OrderedDate:{
             type:Date
             
-        }
-       
-        
+        }   
     })
 
 const Order=mongoose.model("order_info",OrderSchema);

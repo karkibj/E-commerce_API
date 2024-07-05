@@ -1,32 +1,28 @@
-const { MaxKey, MinKey } = require('mongodb');
-const mongoose=require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const UserSchema=new mongoose.Schema({
-    Name:{
-        type:String,
-        require:[true,"Name is required"]
 
+const UserSchema = new Schema({
+    Name: {
+        type: String,
+        required: [true, "Name is required"]
     },
-    email:{
-        type:String,
-        require:[true,"Email is required"],
-        unique:[true,"Email already taken"]
+    email: {
+        type: String,
+        required: [true, "Email is required"],
+        unique: true,
+        lowercase: true,
+        trim: true,
+        match: [/^\S+@\S+\.\S+$/, 'Please enter a valid email']
     },
-    Phone:{
-        type:Number,
-        require:[true,"Phone is required"],
+    Phone: {
+        type: Number,
+        required: [true, "Phone is required"],
     },
-    password:{
-        type:String,
-        require:[true,"Password is required"],
-  
+    password: {
+        type: String,
+        required: [true, "Password is required"],
     }
+});
 
-
-
-
-})
-
-const User=mongoose.model("user_info",UserSchema);
-
-module.exports=User;
+const User = model("User", UserSchema); 
+module.exports = User;

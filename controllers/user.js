@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 const Product = require('../models/products');
 const Order = require('../models/order');
 const User=require('../models/user');
+const bcrypt=require("bcrypt");
 
 async function displayProduct(req, res) {
     productData = await Product.find({});
-    // return res.status(200).json(productData);
-    return res.render('home',{
-        product_data:productData
-    })
+    return res.status(200).json(productData);
+    // return res.render('home',{
+    //     product_data:productData
+    // })
 
 }
 async function placeOrder(req, res) {
@@ -36,20 +37,44 @@ async function placeOrder(req, res) {
     }
 }
 
-
+// const loginUser=async(req,res){
+    
+//     const {email,password}=req.body;
+//     const getUser=User.find();
+// }
 const createUser=async (req,res)=>{
-
+    try{
     const {name,email,password,phone}=req.body;
-    await User.create({
+
+    const salt = bcrypt.genSaltSync(10)
+    const hashedPw = bcrypt.hashSync(password,salt)
+    console.log(hashedPw)
+   
+    const user = await User.create({
         Name:name,
         email:email,
-        password:password,
-        Phone:phone
+        Phone:phone,
+        password:hashedPw
     })
-    return res.status(201).json({"message":"Your account has been created!"});
+    if(!user){
+        return res.status(400).json({success:false, "message": "Error while creating user."})
+    }
+    return res.status(201).json({"message":"Your account has been created!", user });
 }
+catch(err){
+    console.log(err)
+    return res.status(404).json({"Error":err.message})
+}
+}
+
+// const hashingPw= async (pw)=>{
+//     const hash=await bcrypt.hash(pw,10);
+//     return hash;
+// }
+
 module.exports = {
     displayProduct,
     placeOrder,
     createUser,
 }
+
