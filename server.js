@@ -14,11 +14,8 @@ app.use(express.urlencoded({ extended: false }));
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));
-// const url = 'mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net//Ecommerce?retryWrites=true&w=majority';
-const url="mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net//Ecommerce?retryWrites=true&w=majority&appName=BinayaKarki"
 const port = 8080;
-// connectDb("mongodb+srv://karkibj341:7P2ngkPMYigYj9NW@binayakarki.gq7swh7.mongodb.net/Ecommerce");
-connectDb(url);
+connectDb();
 
 
 const options = {

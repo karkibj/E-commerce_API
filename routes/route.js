@@ -3,9 +3,11 @@ const router=express.Router();
 const {addProduct,
     removeProduct
 }=require('../controllers/products');
+
 const {displayProduct,
     placeOrder,
-    createUser
+    createUser,
+    loginUser,
 }=require('../controllers/user');
 
 
@@ -86,7 +88,7 @@ router.get('/', displayProduct);
  *                   type: string
  *                   example: Internal Server Error
  */
-router.patch('/home/order/:id/:quantity', placeOrder);
+
 
 /**
  * @swagger
@@ -96,8 +98,12 @@ router.patch('/home/order/:id/:quantity', placeOrder);
  *        parameters:
  *              -in 
  */
+router.patch('/home/order/:id/:quantity', placeOrder);
 router.post('/admin',addProduct);
 router.delete('/admin/delete/:id',removeProduct);
-
 router.post('/register',createUser);
+router.post('/login',loginUser);
+
 module.exports=router;
+
+
