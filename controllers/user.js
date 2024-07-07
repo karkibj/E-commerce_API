@@ -37,21 +37,20 @@ async function placeOrder(req, res) {
     }
 }
 
-// const loginUser=async(req,res){
-    
-//     const {email,password}=req.body;
-//     const getUser=User.find();
-// }
 const createUser=async (req,res)=>{
     try{
     const {name,email,password,phone}=req.body;
-
-    const salt = bcrypt.genSaltSync(10)
-    const hashedPw = bcrypt.hashSync(password,salt)
-    console.log(hashedPw)
     const isExist=await User.findOne({email})
     if(isExist){
         return res.status(401).json({success:false,"message":"Email already exists"})
+
+    }
+    const salt = bcrypt.genSaltSync(10)
+    const hashedPw = bcrypt.hashSync(password,salt)
+    console.log(hashedPw)
+    const validation=validatePassword(password)
+    if(validation){
+        return res.json({"message":validation})
     }
    
     const user = await User.create({
@@ -94,6 +93,23 @@ const loginUser=async (req,res)=>{
 
 
 }
+
+const validatePassword = (password) => {
+    const lengthRegex = /.{8,}/;
+    const uppercaseRegex = /[A-Z]/;
+    const specialCharRegex = /[#@\$&]/;
+
+    if (!lengthRegex.test(password)) {
+        return "Password must be at least 8 characters long.";
+    }
+    if (!uppercaseRegex.test(password)) {
+        return "Password must contain at least one uppercase letter.";
+    }
+    if (!specialCharRegex.test(password)) {
+        return "Password must contain at least one special character (#, @, $, &).";
+    }
+    return false
+};
 
 // const hashingPw= async (pw)=>{
 //     const hash=await bcrypt.hash(pw,10);
