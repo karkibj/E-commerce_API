@@ -7,14 +7,9 @@ const bcrypt=require("bcrypt");
 async function displayProduct(req, res) {
     productData = await Product.find({});
     return res.status(200).json(productData);
-    // return res.render('home',{
-    //     product_data:productData
-    // })
-
 }
 async function placeOrder(req, res) {
     const { id, quantity } = req.params;
-
     const prodcut = await Product.findById(id)
     const price = prodcut.Price;
     const stock = prodcut.Stock;
@@ -22,6 +17,7 @@ async function placeOrder(req, res) {
     if (stock < Number(quantity)) {
         return res.json({"check":"Out of stock"});
     }
+    
     const total_price = Number(quantity) * price;
     const placeOrder = await Order.create({
         product_id: id,
@@ -48,7 +44,7 @@ const createUser=async (req,res)=>{
     const salt = bcrypt.genSaltSync(10)
     const hashedPw = bcrypt.hashSync(password,salt)
     console.log(hashedPw)
-    const validation=validatePassword(password)
+    validation=isInSecurePassword(password)
     if(validation){
         return res.json({"message":validation})
     }
@@ -94,11 +90,10 @@ const loginUser=async (req,res)=>{
 
 }
 
-const validatePassword = (password) => {
+const isInSecurePassword = (password) => {
     const lengthRegex = /.{8,}/;
     const uppercaseRegex = /[A-Z]/;
     const specialCharRegex = /[#@\$&]/;
-
     if (!lengthRegex.test(password)) {
         return "Password must be at least 8 characters long.";
     }
@@ -108,13 +103,8 @@ const validatePassword = (password) => {
     if (!specialCharRegex.test(password)) {
         return "Password must contain at least one special character (#, @, $, &).";
     }
-    return false
+    return false;
 };
-
-// const hashingPw= async (pw)=>{
-//     const hash=await bcrypt.hash(pw,10);
-//     return hash;
-// }
 
 module.exports = {
     displayProduct,

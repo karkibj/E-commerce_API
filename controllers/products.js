@@ -10,20 +10,13 @@ async function addProduct(req,res){
 
     // using middlware  verfyjwt() -> admin
 
-
-    
-
-
     const {Name,Price,Stock} = req.body;
 
-    // if(!Name && !Price){
-    //     throw new Error(400, "msg")
-    // }
+    if(!Name && !Price){
+        throw new Error(400, "All field required ")
+    }
 
     // items.some(item => item === "" || item?.trim() === undefined);
-    
-    
-
     await Product.create({
         Name:Name,
         Price:Price,
@@ -45,9 +38,7 @@ async function removeProduct(req,res){
     }
     return res.status(200).json({"Message":"Product deleted successfully"});
 
-
 }
-
 
 module.exports={
     addProduct,
