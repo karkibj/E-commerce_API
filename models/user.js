@@ -1,4 +1,5 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, default: mongoose } = require('mongoose');
+const Product = require('./products');
 
 const UserSchema = new Schema({
     Name: {
@@ -20,8 +21,23 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: [true, "Password is required"],
-    }
+    },
+    Refreshtoken:{
+        type:String
+    },
+    myCart:[{
+        _id:{
+           type:mongoose.Schema.ObjectId,
+           ref:"Product"
+        },
+        quantity:{
+            type:Number,
+        },
+       price:{
+        type:Number
+       }
+    }]
 });
 
-const User = model("User", UserSchema); 
+const User = mongoose.model("User", UserSchema); 
 module.exports = User;

@@ -18,16 +18,17 @@ async function addProduct(req,res){
     }
 
     // items.some(item => item === "" || item?.trim() === undefined);
-    await Product.create({
+    const product=await Product.create({
         Name:Name,
         Price:Price,
         Stock:Stock
         // owner: admin._id
        
     })
-    return res.status(200).json({"Message":"Successfull"})
+    return res.status(200).json({"Message":"Successfull",product})
 }
 async function removeProduct(req,res){
+    try{    
     const {id}=req.params;
 
     const deletedproduct = await Product.findByIdAndDelete(id)
@@ -38,6 +39,11 @@ async function removeProduct(req,res){
         return res.status(200).json({"Message":"Product now found "});
     }
     return res.status(200).json({"Message":"Product deleted successfully"});
+}
+catch(err){
+    console.log(err)
+    return res.status(404).json({error:err.message});
+}
 
 }
 
@@ -45,3 +51,10 @@ module.exports={
     addProduct,
     removeProduct,
 }
+
+
+//Registration process
+// --users are created by Admin
+// --same for all user/ml/courseleader/ only role is difference
+// --
+//

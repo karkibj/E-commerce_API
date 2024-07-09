@@ -6,11 +6,13 @@ const path = require('path');
 const router = require('./routes/route');
 const userRouter=require("./routes/user.routes")
 const { startSession } = require('./models/products');
+var cookieParser = require('cookie-parser')
 require('dotenv').config()
 
 const app = express();
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser())
 
 app.set('view engine', 'ejs');
 app.set('views', path.resolve('./views'));

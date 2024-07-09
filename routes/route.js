@@ -8,6 +8,8 @@ const {displayProduct,
     placeOrder,
     createUser,
     loginUser,
+    addtoCart,
+    showCart
 }=require('../controllers/user');
 
 const {jwtAuth}=require('../middlewares/jwtAuth')
@@ -98,12 +100,13 @@ router.get('/', displayProduct);
  *        parameters:
  *              -in 
  */
-router.patch('/home/order/:id/:quantity', placeOrder);
-router.post('/admin',addProduct);
+router.patch('/order/:id/:quantity', placeOrder);
+router.post('/admin/addproduct',addProduct);
 router.delete('/admin/delete/:id',removeProduct);
 router.post('/register',createUser);
 router.post('/login',loginUser);
-
+router.patch('/:id/:quantity',jwtAuth,addtoCart);
+router.get('/cart',jwtAuth,showCart);
 
 module.exports=router;
 

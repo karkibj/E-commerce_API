@@ -3,7 +3,8 @@ const Product = require('../models/products');
 const Order = require('../models/order');
 const User=require('../models/user');
 const bcrypt=require("bcrypt");
-const jwt=require("jsonwebtoken")
+const jwt=require("jsonwebtoken");
+
 
 //display all the products 
 
@@ -15,10 +16,14 @@ const  displayProduct= async (req, res)=> {
 //generating accesstoken
 const generateAcesstoken=(user)=>{
     return jwt.sign({
-      userId:user._id},process.env.SECRET,{'expiresIn':'1h'}
+      userId:user._id},process.env.SECRET,{'expiresIn':'10h'}
    )    
   }
 
+  //generate refreshToken
+  const generateRefreshToken = (user) => {
+    return jwt.sign({ userId: user._id }, process.env.REFRESH_SECRET, { expiresIn: '7d' });
+}
 
 //OderProduct by User
 const placeOrder= async (req, res)=> {
@@ -57,7 +62,7 @@ const createUser=async (req,res)=>{
     }
 
     //hashing password
-    const salt = bcrypt.genSaltSync(10)
+    const salt = bcrypt.genSaltSync(10);
     const hashedPw = bcrypt.hashSync(password,salt);
 
     console.log(hashedPw)
@@ -75,7 +80,7 @@ const createUser=async (req,res)=>{
         Phone:phone,
         password:hashedPw
     })
-
+    
     if(!user){
         return res.status(400).json({success:false, "message": "Error while creating user."})
     }
@@ -88,7 +93,6 @@ catch(err){
 }
 const loginUser=async (req,res)=>{
     try{
-        
         const {email,password}=req.body;
         
         const userData=await User.findOne({email});
@@ -100,18 +104,28 @@ const loginUser=async (req,res)=>{
         if(!checkPw){
             return res.status(401).json({success:false,"message":"Incorrect password!"})
         }
-        const token=generateAcesstoken(userData);
-        res.cookie("accessToken",token);
+        const acessToken=generateAcesstoken(userData);
+        const refreshToken=generateRefreshToken(userData);
+        
+
+        res.cookie("accessToken",acessToken);
+        res.cookie("refreshToken",refreshToken);
+        
+        userData.Refreshtoken=refreshToken;
+        userData.save({validateBeforeSave:false});
         
         return res.status(200).json({sucess:true,"message":"Login Successfull!",userData});
 
     }
     catch(err){
-        return res.status(401).json({"Error":err.message});
         console.log(err)
+        return res.status(401).json({"Error":err.message});
+       
     }
 
 }
+
+
 const isInSecurePassword = (password) => {
     const lengthRegex = /.{8,}/;
     const uppercaseRegex = /[A-Z]/;
@@ -128,11 +142,36 @@ const isInSecurePassword = (password) => {
     return false;
 };
 
+const addtoCart= async (req,res)=>{
+    const {product_id,quantity}=req.params;
+
+    const price=5000
+    const id = req.user._id;
+  const updatedUser=await User.findByIdAndUpdate(id,
+    {$push :{myCart:{product_id,quantity,price}}}
+  )
+   if(!updatedUser){
+    return res.json({success:false,messsage:"failed to add the item to the cart"});
+   }
+
+    return res.json({message:"New product added to the cart"});  
+}
+
+const showCart=async (req,res)=>{
+
+    const UserData=req.user;
+    const cartItems=UserData.myCart
+    return res.json({message:"Cart fetched successfully",cartItems})
+}
+
+
 
 module.exports = {
     displayProduct,
     placeOrder,
     createUser,
     loginUser,
+    addtoCart,
+    showCart,
 }
 
