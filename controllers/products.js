@@ -2,6 +2,7 @@ const mongoose=require('mongoose');
 const Product=require('../models/products');
 
 
+
 async function addProduct(req,res){
     const body=req.body
     // middleware

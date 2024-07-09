@@ -10,7 +10,7 @@ const {displayProduct,
     loginUser,
 }=require('../controllers/user');
 
-
+const {jwtAuth}=require('../middlewares/jwtAuth')
 /**
  * @swagger
  * /home:
