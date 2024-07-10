@@ -17,7 +17,7 @@ const  displayProduct= async (req, res)=> {
 const generateAcesstoken=(user)=>{
     return jwt.sign({
       userId:user._id},process.env.SECRET,{'expiresIn':'10h'}
-   )    
+   )   
   }
 
   //generate refreshToken
@@ -145,8 +145,9 @@ const isInSecurePassword = (password) => {
 const addtoCart= async (req,res)=>{
     const {product_id,quantity}=req.params;
 
-    const price=5000
+    
     const id = req.user._id;
+  const price=5000;
   const updatedUser=await User.findByIdAndUpdate(id,
     {$push :{myCart:{product_id,quantity,price}}}
   )
@@ -157,12 +158,32 @@ const addtoCart= async (req,res)=>{
     return res.json({message:"New product added to the cart"});  
 }
 
-const showCart=async (req,res)=>{
 
-    const UserData=req.user;
-    const cartItems=UserData.myCart
-    return res.json({message:"Cart fetched successfully",cartItems})
-}
+
+
+const showCart = async (req, res) => {
+    try {
+      const userId = req.user._id;
+  
+      // Find the user and populate the 'myCart' field with details from 'product_info'
+      const user = await User.findById(userId).populate('myCart._id', 'Name Price Stock');
+
+      console.log('User:', user);
+  
+      if (!user) {
+        return res.status(404).json({ message: "User not found" });
+      }
+  
+      const cartItems = user.myCart;
+      console.log('Cart Items:', cartItems);
+  
+      return res.json({ message: "Cart fetched successfully", cartItems });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ message: "An error occurred while fetching the cart" });
+    }
+  };
+  
 
 
 

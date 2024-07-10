@@ -28,7 +28,7 @@ const UserSchema = new Schema({
     myCart:[{
         _id:{
            type:mongoose.Schema.ObjectId,
-           ref:"Product"
+           ref:"product_info"
         },
         quantity:{
             type:Number,

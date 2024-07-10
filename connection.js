@@ -9,7 +9,6 @@ async function connectDb() {
             serverSelectionTimeoutMS: 5000, // Increase timeout to 5 seconds
         });
         console.log("Mongo connected successfully");
-
         // console.log("hello",connectionInstance.connection.host);
     } catch (err) {
         console.log("Error occurred", err);

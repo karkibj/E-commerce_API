@@ -107,7 +107,6 @@ router.post('/register',createUser);
 router.post('/login',loginUser);
 router.patch('/:id/:quantity',jwtAuth,addtoCart);
 router.get('/cart',jwtAuth,showCart);
-
 module.exports=router;
 
 
