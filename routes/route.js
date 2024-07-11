@@ -9,7 +9,8 @@ const {displayProduct,
     createUser,
     loginUser,
     addtoCart,
-    showCart
+    showCart,
+    deleteCart,
 }=require('../controllers/user');
 
 const {jwtAuth}=require('../middlewares/jwtAuth')
@@ -105,8 +106,9 @@ router.post('/admin/addproduct',addProduct);
 router.delete('/admin/delete/:id',removeProduct);
 router.post('/register',createUser);
 router.post('/login',loginUser);
-router.patch('/:id/:quantity',jwtAuth,addtoCart);
+router.patch('/',jwtAuth,addtoCart);
 router.get('/cart',jwtAuth,showCart);
+router.delete('/cart/removeitem',jwtAuth,deleteCart)
 module.exports=router;
 
 

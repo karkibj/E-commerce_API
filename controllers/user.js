@@ -142,21 +142,27 @@ const isInSecurePassword = (password) => {
     return false;
 };
 
-const addtoCart= async (req,res)=>{
-    const {product_id,quantity}=req.params;
+const addtoCart = async (req, res) => {
+    try {
+        const { product_id, quantity } = req.body; // Extract product details from request body
+        const id = req.user._id; // Authenticated user ID
 
-    
-    const id = req.user._id;
-  const price=5000;
-  const updatedUser=await User.findByIdAndUpdate(id,
-    {$push :{myCart:{product_id,quantity,price}}}
-  )
-   if(!updatedUser){
-    return res.json({success:false,messsage:"failed to add the item to the cart"});
-   }
+        const updatedUser = await User.findByIdAndUpdate(
+            id,
+            { $push: { myCart: { _id: product_id, quantity } } }, 
+            { new: true } // 
+        );
 
-    return res.json({message:"New product added to the cart"});  
-}
+        if (!updatedUser) {
+            return res.status(400).json({ success: false, message: "Failed to add the item to the cart" });
+        }
+
+        return res.status(200).json({ message: "New product added to the cart", updatedCart: updatedUser.myCart });
+    } catch (error) {
+        console.error("Error adding product to cart:", error);
+        return res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
 
 
 
@@ -173,7 +179,6 @@ const showCart = async (req, res) => {
       if (!user) {
         return res.status(404).json({ message: "User not found" });
       }
-  
       const cartItems = user.myCart;
       console.log('Cart Items:', cartItems);
   
@@ -184,6 +189,27 @@ const showCart = async (req, res) => {
     }
   };
   
+  const deleteCart = async (req, res) => {
+    try {
+        const { productId } = req.body; 
+        const user_id = req.user._id; 
+
+        const updatedUser = await User.findByIdAndUpdate(
+            user_id,
+            { $pull: { myCart: { _id: productId } } },
+            { new: true } // To return the updated document
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User or product not found" });
+        }
+
+        return res.status(200).json({ message: "Product removed from cart", updatedCart: updatedUser.myCart });
+    } catch (error) {
+        console.error("Error removing product from cart:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
+    }
+};
 
 
 
@@ -194,5 +220,6 @@ module.exports = {
     loginUser,
     addtoCart,
     showCart,
+    deleteCart
 }
 

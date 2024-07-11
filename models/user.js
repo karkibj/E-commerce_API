@@ -28,16 +28,18 @@ const UserSchema = new Schema({
     myCart:[{
         _id:{
            type:mongoose.Schema.ObjectId,
-           ref:"product_info"
+           ref:"product_info",
         },
         quantity:{
-            type:Number,
-        },
-       price:{
-        type:Number
-       }
-    }]
-});
+            type:Number}
+           
+        }
+        
+
+        
+    ]
+})
+
 
 const User = mongoose.model("User", UserSchema); 
 module.exports = User;
